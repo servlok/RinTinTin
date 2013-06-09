@@ -68,7 +68,7 @@ int Server::start() {
                     clientSocket = new TcpSocket(sock);
                     pool.add(*clientSocket);
 
-                    clientSocket->set(60);
+                    clientSocket->set(180);
 
                     clientHandler = new Communication(clientSocket, &(pool));
                     QThreadPool::globalInstance()->start(clientHandler);

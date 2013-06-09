@@ -93,10 +93,10 @@ PacketType ProtocolParser::readPacketType(int& index,QString data) {
     ++index;
 
 
-    PacketType value = (PacketType)packetType.toInt();
+    int value = (PacketType)(packetType.toInt());
     if ( value < 0 || value > 17) throw new BadPackageException();
 
-    return value;
+    return (PacketType)value;
 }
 
 

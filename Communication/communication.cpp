@@ -2,8 +2,6 @@
 #include <iostream>
 #include <QDebug>
 
-bool goOutC = false;
-
 Communication::Communication() :
     QRunnable()
 {
@@ -24,6 +22,8 @@ void Communication::run() {
     QString dataBuffer;
     int ret;
     int ret2;
+
+    this->goOutC = true;
 
     while (!goOutC) {
             if((ret = this->tcpsocket->selectTimedSocket()) > 0 ) {
@@ -63,7 +63,7 @@ void Communication::run() {
 void Communication::sendData(QString message) {
     if( this->tcpsocket->sendPackage(message) == -1 ) {
         std::cout<<"Wystapil blad z wysylaniem pakietow!\n";
-        goOutC = true;
+        this->goOutC = true;
     }
 }
 

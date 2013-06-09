@@ -13,6 +13,7 @@ private:
     TcpSocket* tcpsocket;
     SocketPool* pool;
     ProtocolParser* parser;
+    bool goOutC;
 public:
     explicit Communication();
     Communication(TcpSocket* tcpsocket,SocketPool* socketPool);
