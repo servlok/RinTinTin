@@ -4,8 +4,9 @@
 #include <iostream>
 
 
-ProtocolParser::ProtocolParser()
+ProtocolParser::ProtocolParser(TcpSocket *sock)
 {
+    this->tcpsocket = sock;
 //    deserialization = new Deserializacja();
 }
 
@@ -15,7 +16,7 @@ ProtocolParser::~ProtocolParser() {
 
 int ProtocolParser::parseIn(QString data) {
     int index = 0;
-    int packetType;
+    PacketType packetType;
     try {
         packetType = this->readPacketType(index,data);
     } catch(BadPackageException* ex ) {
@@ -62,6 +63,9 @@ int ProtocolParser::parseIn(QString data) {
             break;
         default :
             std::cout<<"Obecnie odebranie pakietu jest nie obslugiwane\n";
+            ResponseAddUserPacket packet;
+            packet.userId = 20;
+            this->parseOut(packet);
             return 1;
             break;
         }
@@ -77,7 +81,7 @@ int ProtocolParser::parseIn(QString data) {
 
 }
 
-int ProtocolParser::readPacketType(int& index,QString data) {
+PacketType ProtocolParser::readPacketType(int& index,QString data) {
     QString packetType = data;
     //this->deencryption(data);
 
@@ -89,7 +93,7 @@ int ProtocolParser::readPacketType(int& index,QString data) {
     ++index;
 
 
-    int value = packetType.toInt();
+    PacketType value = (PacketType)packetType.toInt();
     if ( value < 0 || value > 17) throw new BadPackageException();
 
     return value;
@@ -279,7 +283,7 @@ int ProtocolParser::parseOut(Pakiet packet) {
             break;
     }
 
-
+    tcpsocket->sendPackage(toSend);
 
     return 0;
 

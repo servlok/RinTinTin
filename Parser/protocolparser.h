@@ -4,13 +4,15 @@
 #include "packettype.h"
 //#include "../Deserialization/deserializacja.h"
 #include "../Deserialization/pakiet.h"
+#include "../Communication/tcpsocket.h"
 
 
 class ProtocolParser
 {
 private:
 //    Deserializacja* deserialization;
-    int readPacketType(int& index, QString data);
+    TcpSocket* tcpsocket;
+    PacketType readPacketType(int& index, QString data);
 
     ////////////////////////////////////////////////////////////IN//////////////////////////////////////////////////////////////////////
     PacketType readPacketType(int& index);
@@ -50,7 +52,7 @@ private:
     void deencryption(char* data);
     void encryption(QString& data);
 public:
-    ProtocolParser();
+    ProtocolParser(TcpSocket* sock);
     ~ProtocolParser();
     int parseIn(QString data);
 

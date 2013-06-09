@@ -16,7 +16,7 @@ Communication::Communication(TcpSocket* tcpsocket, SocketPool* socketPool) :
     this->pool = socketPool;
 
     this->setAutoDelete(true);
-    this->parser = new ProtocolParser();
+    this->parser = new ProtocolParser(tcpsocket);
 
 }
 
