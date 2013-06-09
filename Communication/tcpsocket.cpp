@@ -113,7 +113,7 @@ int TcpSocket::receivePackage(QString& input) {
             std::cout<<"Wystapil blad podczas odbierania pakietu!\n";
             return -1;
         }
-        if(mSize[i] == 'k') {
+        if(mSize[i] == '\n') {
             switch(i){
             case 0:
                 return 0;
