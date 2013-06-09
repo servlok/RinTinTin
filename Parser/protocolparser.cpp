@@ -1,5 +1,6 @@
 #include "protocolparser.h"
 #include "../Exceptions/badpackageexception.h"
+#include <QDebug>
 #include <iostream>
 
 
@@ -24,7 +25,7 @@ int ProtocolParser::parseIn(QString data) {
     }
 
     Pakiet packet;
-
+    qDebug()<<"Idik otrzymanego pakietu "<<packetType<<"\n";
     try {
         switch((PacketType)packetType) {
         case ADD_USER :
