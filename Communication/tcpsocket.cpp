@@ -83,6 +83,7 @@ int TcpSocket::sendPackage(std::string message) {
 }
 
 int TcpSocket::sendPackage(QString message) {
+    qDebug()<<"wiadomosc do wyslania to: "<<message;
     int operation;
     for(int i = 0; i < message.size(); ++i) {
         QChar ch = message[i];

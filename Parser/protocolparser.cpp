@@ -296,7 +296,7 @@ QString intToStr(int n)
           ret = "-";
           n = -n;
      }
-     do {
+     do {36Obecnie
           tmp += n % 10 + 48;
           n -= n % 10;
      }
