@@ -85,7 +85,8 @@ int TcpSocket::sendPackage(std::string message) {
 int TcpSocket::sendPackage(QString message) {
     int operation;
     for(int i = 0; i < message.size(); ++i) {
-        operation = send(this->sock, &message[i].unicode(), 1,0);
+        QChar ch = message[i];
+        operation = send(this->sock, &ch, 1,0);
         if (operation == -1) {
             std::cout<<"Wystapil blad podczas wysylania pakietu!\n";
             return -1;

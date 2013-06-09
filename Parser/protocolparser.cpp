@@ -339,11 +339,11 @@ QString ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
 
 QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     QString response,temp;
-    response += "3";
-    response += '\n';
+    temp += "3";
+    temp += '\n';
 
-    response += intToStr(packet.userId);
-    response += '\n';
+    temp += intToStr(packet.userId);
+    temp += '\n';
 
     response.append(temp.size());
     response += '\n';
@@ -354,11 +354,11 @@ QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
 
 QString ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet) {
     QString response,temp;
-    response += "5";
-    response += '\n';
+    temp += "5";
+    temp += '\n';
 
-    response += intToStr(packet.globalLastRestaurantId);
-    response += '\n';
+    temp += intToStr(packet.globalLastRestaurantId);
+    temp += '\n';
 
     response.append(temp.size());
     response += '\n';
@@ -369,17 +369,17 @@ QString ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet) {
 
 QString ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
     QString response,temp;
-    response += "11";
-    response += '\n';
+    temp += "11";
+    temp += '\n';
 
-    response += packet.userLogin;
-    response += '\n';
+    temp += packet.userLogin;
+    temp += '\n';
 
-    response += packet.text;
-    response += '\n';
+    temp += packet.text;
+    temp += '\n';
 
-    response += packet.date;
-    response += '\n';
+    temp += packet.date;
+    temp += '\n';
 
     response.append(temp.size());
     response += '\n';
@@ -390,20 +390,20 @@ QString ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
 
 QString ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
     QString response,temp;
-    response += "7";
-    response += '\n';
+    temp += "7";
+    temp += '\n';
 
-    response += intToStr(packet.restaurantId);
-    response += '\n';
+    temp += intToStr(packet.restaurantId);
+    temp += '\n';
 
-    response += packet.restaurantName;
-    response += '\n';
+    temp += packet.restaurantName;
+    temp += '\n';
 
-    response += packet.restaurantAdress;
-    response += '\n';
+    temp += packet.restaurantAdress;
+    temp += '\n';
 
-    response += packet.restaurantType;
-    response += '\n';
+    temp += packet.restaurantType;
+    temp += '\n';
 
     std::cout<<"Wyslano RESPONSEGETRESTAURANT"<<std::endl;
 
@@ -416,11 +416,11 @@ QString ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
 
 QString ProtocolParser::parsePacketOut(PingPacket packet) {
     QString response,temp;
-    response += "0";
-    response += '\n';
+    temp += "0";
+    temp += '\n';
 
-    response += intToStr(packet.userId);
-    response += '\n';
+    temp += intToStr(packet.userId);
+    temp += '\n';
 
     response.append(temp.size());
     response += '\n';
@@ -431,10 +431,10 @@ QString ProtocolParser::parsePacketOut(PingPacket packet) {
 
 QString ProtocolParser::parsePacketOut(ResponseDeleteCommentPacket packet) {
     QString response,temp;
-    response += "8";
-    response += '\n';
-    (packet.ifDeleted == true ? response += "1" : response +="0" );
-    response += '\n';
+    temp += "8";
+    temp += '\n';
+    (packet.ifDeleted == true ? temp += "1" : temp +="0" );
+    temp += '\n';
 
     response.append(temp.size());
     response += '\n';
@@ -445,10 +445,10 @@ QString ProtocolParser::parsePacketOut(ResponseDeleteCommentPacket packet) {
 
 QString ProtocolParser::parsePacketEndOfData() {
     QString response,temp;
-    response +="9";
-    response += '\n';
-    response +="sth";
-    response += '\n';
+    temp +="9";
+    temp += '\n';
+    temp +="sth";
+    temp += '\n';
 
     std::cout<<"Wyslano END_OF_DATA";
     response.append(temp.size());
@@ -460,8 +460,8 @@ QString ProtocolParser::parsePacketEndOfData() {
 
 QString ProtocolParser::parsePingPacket() {
     QString response,temp;
-    response += "1";
-    response += '\n';
+    temp += "1";
+    temp += '\n';
 
     return response;
 }
