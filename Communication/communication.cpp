@@ -23,7 +23,7 @@ void Communication::run() {
     int ret;
     int ret2;
 
-    this->goOutC = true;
+    this->goOutC = false;
 
     while (!goOutC) {
             if((ret = this->tcpsocket->selectTimedSocket()) > 0 ) {
