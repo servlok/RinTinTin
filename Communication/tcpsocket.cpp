@@ -2,6 +2,8 @@
 #include <QThreadPool>
 #include <iostream>
 #include <QDebug>
+#include <stdio.h>
+#include <stdlib.h>
 
 TcpSocket::TcpSocket()
 {
