@@ -108,7 +108,7 @@ int TcpSocket::receivePackage(QString& input) {
     char data;
     bool goOut = false;
     for(int i = 0; !goOut; ++i) {
-        operation = recv(this->sock, &mSize[i].unicode(), 1, 0);
+        operation = recv(this->sock, &mSize[i], 1, 0);
         if(operation == -1) {
             std::cout<<"Wystapil blad podczas odbierania pakietu!\n";
             return -1;
