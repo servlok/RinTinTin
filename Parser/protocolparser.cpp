@@ -27,7 +27,7 @@ int ProtocolParser::parseIn(QString data) {
     Pakiet packet;
     qDebug()<<"Idik otrzymanego pakietu "<<packetType<<"\n";
     try {
-        switch((PacketType)packetType) {
+        switch(packetType) {
         case ADD_USER :
             packet = this->parseUserPacket(index,data);
             std::cout<<"Otrzymano pakiet ADD_USER\n";
@@ -89,7 +89,7 @@ int ProtocolParser::readPacketType(int& index,QString data) {
     ++index;
 
 
-    int value = (PacketType)(packetType.toInt());
+    int value = packetType.toInt();
     if ( value < 0 || value > 17) throw new BadPackageException();
 
     return value;
