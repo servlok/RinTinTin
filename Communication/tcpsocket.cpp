@@ -2,8 +2,7 @@
 #include <QThreadPool>
 #include <iostream>
 #include <QDebug>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 TcpSocket::TcpSocket()
 {
@@ -103,7 +102,9 @@ bool TcpSocket::checkIfInvalid() {
 int TcpSocket::receivePackage(QString& input) {
     input.clear();
     int operation;
-    QChar* mSize = new QChar[3];
+    QChar mSize[3];
+    QString temp;
+    int size;
     char data;
     bool goOut = false;
     for(int i = 0; !goOut; ++i) {
@@ -112,7 +113,28 @@ int TcpSocket::receivePackage(QString& input) {
             std::cout<<"Wystapil blad podczas odbierania pakietu!\n";
             return -1;
         }
-        if(mSize[i] == '/n') {
+        if(mSize[i] == 'k') {
+            switch(i){
+            case 0:
+                return 0;
+                break;
+            case 1:
+                temp += mSize[0];
+                size = temp.toInt();
+                break;
+            case 2:
+                temp += mSize[0];
+                temp += mSize[1];
+                size = temp.toInt();
+                break;
+            case 3:
+                temp += mSize[0];
+                temp += mSize[1];
+                temp += mSize[2];
+                size = temp.toInt();
+                break;
+            }
+
             goOut = true;
             break;
          }
@@ -122,8 +144,6 @@ int TcpSocket::receivePackage(QString& input) {
     }
 
 
-    int size = QString(mSize).toInt();
-    delete[] mSize;
     std::cout<<"Wielkosc pakietu przychodzacego "<<size;
     for(int i = 0; i < size; ++i) {
         operation = recv(this->sock, &data, 1, 0);
