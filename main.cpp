@@ -4,6 +4,8 @@
 #include <QTextCodec>
 #include <QThreadPool>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 int port = 10001;
 int maxUsers = 1024;
