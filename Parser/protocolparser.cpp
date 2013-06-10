@@ -26,15 +26,15 @@ int ProtocolParser::parseIn(std::string data) {
     }
 
     Pakiet packet;
-    qDebug()<<"Idik otrzymanego pakietu "<<packetType<<"\n";
+    ResponseAddUserPacket packet2;
+    std::cout<<"Idik otrzymanego pakietu "<<packetType<<"\n";
     try {
         switch(packetType) {
         case ADD_USER :
             packet = this->parseUserPacket(index,data);
             std::cout<<"Otrzymano pakiet ADD_USER\n";
-            ResponseAddUserPacket packet;
-            packet.userId = 20;
-            this->parseOut(packet);
+            packet2.userId = 20;
+            this->parseOut(packet2);
             break;
         case CHECK_RESTAURANT :
             packet = this->parseCheckRestaurantPacket(index,data);
