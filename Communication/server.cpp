@@ -24,8 +24,7 @@ Server::~Server(void)
         pool.clear(*mainSocket);
         delete mainSocket;
     }
-
-    delete DataAccessObject::getInstance();
+;
 }
 
 
