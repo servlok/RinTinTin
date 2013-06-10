@@ -1,6 +1,6 @@
 #ifndef PAKIET_H
 #define PAKIET_H
-#include <QString>
+#include <string>
 /*
  *	PING = 0,
     PONG = 1,
@@ -50,8 +50,8 @@ class PongPacket : public Pakiet {
 class AddUserPacket : public Pakiet {
     public:
     AddUserPacket();
-    QString login;
-    QString password;
+    std::string login;
+    std::string password;
 };
 
 class ResponseAddUserPacket : public Pakiet {
@@ -83,9 +83,9 @@ class ResponseGetRestaurantPacket : public Pakiet {
     public:
     ResponseGetRestaurantPacket();
     int restaurantId;
-    QString restaurantName;
-    QString restaurantAdress;
-    QString restaurantType;
+    std::string restaurantName;
+    std::string restaurantAdress;
+    std::string restaurantType;
 };
 
 class GetCommentsPacket : public Pakiet {
@@ -93,15 +93,15 @@ class GetCommentsPacket : public Pakiet {
     GetCommentsPacket();
     int restaurantId;
     int commentId;
-    QString addedDate;
+    std::string addedDate;
 };
 
 class ResponseGetCommentsPacket : public Pakiet {
     public:
     ResponseGetCommentsPacket();
-    QString userLogin;
-    QString text;
-    QString date;
+    std::string userLogin;
+    std::string text;
+    std::string date;
 };
 
 class AddCommentPacket : public Pakiet {
@@ -109,8 +109,8 @@ class AddCommentPacket : public Pakiet {
     AddCommentPacket();
     int userId;
     int restaurantId;
-    QString date;
-    QString text;
+    std::string date;
+    std::string text;
 };
 
 class ResponseAddCommentPacket : public Pakiet {
@@ -122,9 +122,9 @@ class ResponseAddCommentPacket : public Pakiet {
 class AddRestaurantPacket : public Pakiet {
     public:
     AddRestaurantPacket();
-    QString restaurantName;
-    QString restaurantAdress;
-    QString restaurantType;
+    std::string restaurantName;
+    std::string restaurantAdress;
+    std::string restaurantType;
 };
 
 class ResponseAddRestaurantPacket : public Pakiet {
