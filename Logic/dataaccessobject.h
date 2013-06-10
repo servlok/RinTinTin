@@ -7,11 +7,12 @@
 
 class DataAccessObject
 {
-
+private:
     QSqlDatabase* db;
     QString login;
     QString password;
     QMutex mutex;
+    DataAccessObject(void);
 
 public:
     ResponseAddUserPacket addUser(AddUserPacket userToAdd);
@@ -23,7 +24,7 @@ public:
     ResponseDeleteCommentPacket deleteComment(DeleteCommentPacket);
 
 
-    DataAccessObject(void);
+    static DataAccessObject& getInstance();
     ~DataAccessObject(void);
 };
 

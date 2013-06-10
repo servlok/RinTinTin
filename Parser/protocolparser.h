@@ -18,22 +18,22 @@ private:
     ////////////////////////////////////////////////////////////IN//////////////////////////////////////////////////////////////////////
     PacketType readPacketType(int& index);
 
-    AddUserPacket parseUserPacket(int index, std::string data);
+    AddUserPacket* parseUserPacket(int index, std::string data);
 
-    CheckRestaurantPacket parseCheckRestaurantPacket(int index, std::string data);
+    CheckRestaurantPacket* parseCheckRestaurantPacket(int index, std::string data);
 
-    GetRestaurantPacket parseGetRestaurantPacket(int index, std::string data);
+    GetRestaurantPacket* parseGetRestaurantPacket(int index, std::string data);
 
-    GetCommentsPacket parseGetCommentsPacket(int index, std::string data);
+    GetCommentsPacket* parseGetCommentsPacket(int index, std::string data);
 
-    AddCommentPacket parseAddCommentPacket(int index, std::string data );
+    AddCommentPacket* parseAddCommentPacket(int index, std::string data );
 
-    AddRestaurantPacket parseAddRestaurantPacket(int index, std::string data );
+    AddRestaurantPacket* parseAddRestaurantPacket(int index, std::string data );
 
-    DeleteCommentPacket parseDeleteCommentPacket(int index, std::string data );
+    DeleteCommentPacket* parseDeleteCommentPacket(int index, std::string data );
 
 
-    SendNextPacket parseSendNextPacket();
+    SendNextPacket* parseSendNextPacket();
     /////////////////////////////////////////////////////////////////OUT/////////////////////////////////////////////////////////////////////
 
     void parsePacketOut(ResponseAddCommentPacket);

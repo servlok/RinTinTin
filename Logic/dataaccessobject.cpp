@@ -23,6 +23,10 @@ DataAccessObject::DataAccessObject(void)
 
 }
 
+DataAccessObject &DataAccessObject::getInstance() {
+    static DataAccessObject instance;
+    return instance;
+}
 
 DataAccessObject::~DataAccessObject(void)
 {

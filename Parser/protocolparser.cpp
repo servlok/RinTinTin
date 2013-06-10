@@ -25,7 +25,7 @@ int ProtocolParser::parseIn(std::string data) {
         return -1;
     }
 
-    Pakiet packet;
+    Pakiet* packet;
     std::cout<<"Idik otrzymanego pakietu "<<packetType<<"\n";
     try {
         switch(packetType) {
@@ -73,7 +73,7 @@ int ProtocolParser::parseIn(std::string data) {
         return -1;
     }
 
-    deserialization->start(&packet);
+    deserialization->start(packet);
 
     return 0;
 
@@ -100,84 +100,84 @@ PacketType ProtocolParser::readPacketType(int& index,std::string data) {
 
 
 
-AddUserPacket ProtocolParser::parseUserPacket(int index, std::string data) {
-    AddUserPacket temp;
+AddUserPacket* ProtocolParser::parseUserPacket(int index, std::string data) {
+    AddUserPacket* temp = new AddUserPacket();
 
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        temp.login += data[index];
+        temp->login += data[index];
     }
     ++index;
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        temp.password += data[index];
+        temp->password += data[index];
     }
 
     return temp;
 }
 
 
-CheckRestaurantPacket ProtocolParser::parseCheckRestaurantPacket(int index, std::string data) {
+CheckRestaurantPacket* ProtocolParser::parseCheckRestaurantPacket(int index, std::string data) {
     std::string temp;
-    CheckRestaurantPacket packet;
+    CheckRestaurantPacket* packet = new CheckRestaurantPacket();
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
         temp += data[index];
     }
 
-    packet.localLastRestaurantId = atoi(temp.c_str());
+    packet->localLastRestaurantId = atoi(temp.c_str());
 
     return packet;
 }
 
 
-GetRestaurantPacket ProtocolParser::parseGetRestaurantPacket(int index, std::string data) {
+GetRestaurantPacket* ProtocolParser::parseGetRestaurantPacket(int index, std::string data) {
     std::string temp;
-    GetRestaurantPacket packet;
+    GetRestaurantPacket* packet = new GetRestaurantPacket();
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
         temp += data[index];
     }
 
-    packet.toUpdateRestaurantId = atoi(temp.c_str());
+    packet->toUpdateRestaurantId = atoi(temp.c_str());
 
     return packet;
 }
 
-GetCommentsPacket ProtocolParser::parseGetCommentsPacket(int index, std::string data ) {
+GetCommentsPacket* ProtocolParser::parseGetCommentsPacket(int index, std::string data ) {
     std::string temp;
-    GetCommentsPacket packet;
+    GetCommentsPacket* packet = new GetCommentsPacket();
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
         temp += data[index];
     }
 
-    packet.restaurantId = atoi(temp.c_str());
+    packet->restaurantId = atoi(temp.c_str());
     ++index;
 
     for(; data[index] != '\n'; ++index) {
-        packet.addedDate+=data[index];
+        packet->addedDate += data[index];
     }
 
     return packet;
 }
 
 
-AddCommentPacket ProtocolParser::parseAddCommentPacket(int index, std::string data ) {
+AddCommentPacket* ProtocolParser::parseAddCommentPacket(int index, std::string data ) {
     std::string temp;
-    AddCommentPacket packet;
+    AddCommentPacket* packet = new AddCommentPacket();
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
         temp+=data[index];
     }
 
-    packet.userId = atoi(temp.c_str());
+    packet->userId = atoi(temp.c_str());
     temp.clear();
     ++index;
 
@@ -187,63 +187,63 @@ AddCommentPacket ProtocolParser::parseAddCommentPacket(int index, std::string da
         temp+=data[index];
     }
 
-    packet.restaurantId = atoi(temp.c_str());
+    packet->restaurantId = atoi(temp.c_str());
     ++index;
 
     for(; data[index] != '\n'; ++index) {
-        packet.date+=data[index];
+        packet->date+=data[index];
     }
     ++index;
 
     for(; data[index] != '\n'; ++index) {
-        packet.text+=data[index];
+        packet->text+=data[index];
     }
 
     return packet;
 }
 
 
-AddRestaurantPacket ProtocolParser::parseAddRestaurantPacket(int index, std::string data ) {
-    AddRestaurantPacket packet;
+AddRestaurantPacket* ProtocolParser::parseAddRestaurantPacket(int index, std::string data ) {
+    AddRestaurantPacket* packet = new AddRestaurantPacket();
 
     for(; data[index] != '\n'; ++index) {
-        packet.restaurantName+=data[index];
+        packet->restaurantName+=data[index];
     }
     ++index;
 
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        packet.restaurantAdress+=data[index];
+        packet->restaurantAdress+=data[index];
     }
     ++index;
 
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        packet.restaurantType+=data[index];
+        packet->restaurantType+=data[index];
     }
 
     return packet;
 }
 
 
-DeleteCommentPacket ProtocolParser::parseDeleteCommentPacket(int index, std::string data ) {
+DeleteCommentPacket* ProtocolParser::parseDeleteCommentPacket(int index, std::string data ) {
     std::string temp;
-    DeleteCommentPacket packet;
+    DeleteCommentPacket* packet = new DeleteCommentPacket();
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
         temp+=data[index];
     }
 
-    packet.commentId = atoi(temp.c_str());
+    packet->commentId = atoi(temp.c_str());
 
     return packet;
 }
 
-SendNextPacket ProtocolParser::parseSendNextPacket() {
-    return SendNextPacket();
+SendNextPacket* ProtocolParser::parseSendNextPacket() {
+    return new SendNextPacket();
 }
 
 

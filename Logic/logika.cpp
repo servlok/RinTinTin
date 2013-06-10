@@ -6,12 +6,12 @@
 Logika::Logika(Deserializacja* deserializacja)
 {
     des= deserializacja;
-    doa = new DataAccessObject();
+    doa = &DataAccessObject::getInstance();
     state = 0;
 }
 
 Logika::~Logika() {
-    delete doa;
+
 }
 
 void Logika::set(Deserializacja  *nowa)
@@ -219,4 +219,5 @@ void Logika::Service(Pakiet *pakietRevice)
 
     }
 
+    delete pakietRevice;
 }

@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <QThreadPool>
 #include "communication.h"
+#include "../Logic/dataaccessobject.h"
 
 
 SocketPool pool;
@@ -23,6 +24,8 @@ Server::~Server(void)
         pool.clear(*mainSocket);
         delete mainSocket;
     }
+
+    delete DataAccessObject::getInstance();
 }
 
 

@@ -23,7 +23,7 @@ void Deserializacja::set(Logika *nowa)
 }
 
 
-int Deserializacja::start(Pakiet *pakietRevice)
+int Deserializacja::start(Pakiet* pakietRevice)
 {
 
     switch(pakietRevice->id)
