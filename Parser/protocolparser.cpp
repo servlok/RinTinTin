@@ -351,7 +351,7 @@ std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     response += '\n';
     response += temp;
     //this->encryption(response);
-    std::cout<<"Pakiet do wyslania1 "<<response;
+    std::cout<<"UserId: "<<packet.userId<<" Pakiet do wyslania1 "<<response;
     return response;
 }
 
