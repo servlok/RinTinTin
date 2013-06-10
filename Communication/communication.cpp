@@ -19,7 +19,7 @@ Communication::Communication(TcpSocket* tcpsocket, SocketPool* socketPool) :
 }
 
 void Communication::run() {
-    QString dataBuffer;
+    std::string dataBuffer;
     int ret;
     int ret2;
 
@@ -36,7 +36,7 @@ void Communication::run() {
                 } else {
 
 
-                    qDebug()<<"W buforze siedzi: "<<dataBuffer;
+                    std::cout<<"W buforze siedzi: "<<dataBuffer;
                     parser->parseIn(dataBuffer);
                     dataBuffer.clear();
 
@@ -60,7 +60,7 @@ void Communication::run() {
 
 }
 
-void Communication::sendData(QString message) {
+void Communication::sendData(std::string message) {
     if( this->tcpsocket->sendPackage(message) == -1 ) {
         std::cout<<"Wystapil blad z wysylaniem pakietow!\n";
         this->goOutC = true;

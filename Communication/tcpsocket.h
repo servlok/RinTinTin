@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 #include <sys/select.h>
 #include <sys/time.h>
-#include <QString>
+#include <string>
 
 class TcpSocket
 {
@@ -38,10 +38,10 @@ public:
     int acceptSocket();
 
 
-    int receivePackage(QString& input);
+    int receivePackage(std::string& input);
 
     int sendPackage(std::string message);
-    int sendPackage(QString message);
+//    int sendPackage(std::string message);
     void set(int newTime);
 
     int operator==(const TcpSocket& tcp) {

@@ -14,7 +14,7 @@ ProtocolParser::~ProtocolParser() {
 //    delete deserialization;
 }
 
-int ProtocolParser::parseIn(QString data) {
+int ProtocolParser::parseIn(std::string data) {
     int index = 0;
     PacketType packetType;
     try {
@@ -81,19 +81,19 @@ int ProtocolParser::parseIn(QString data) {
 
 }
 
-PacketType ProtocolParser::readPacketType(int& index,QString data) {
-    QString packetType = data;
+PacketType ProtocolParser::readPacketType(int& index,std::string data) {
+    std::string packetType = data;
     //this->deencryption(data);
 
     for(index = 0; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        packetType.append(data[index]);
+        packetType += data[index];
     }
     ++index;
 
 
-    int value = packetType.toInt();
+    int value = atoi(packetType.c_str());
     if ( value < 0 || value > 17) throw new BadPackageException();
 
     return (PacketType)value;
@@ -102,144 +102,144 @@ PacketType ProtocolParser::readPacketType(int& index,QString data) {
 
 
 
-AddUserPacket ProtocolParser::parseUserPacket(int index, QString data) {
+AddUserPacket ProtocolParser::parseUserPacket(int index, std::string data) {
     AddUserPacket temp;
 
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        temp.login.append(data[index]);
+        temp.login += data[index];
     }
     ++index;
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        temp.password.append(data[index]);
+        temp.password += data[index];
     }
 
     return temp;
 }
 
 
-CheckRestaurantPacket ProtocolParser::parseCheckRestaurantPacket(int index, QString data) {
-    QString temp;
+CheckRestaurantPacket ProtocolParser::parseCheckRestaurantPacket(int index, std::string data) {
+    std::string temp;
     CheckRestaurantPacket packet;
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        temp.append(data[index]);
+        temp += data[index];
     }
 
-    packet.localLastRestaurantId = temp.toInt();
+    packet.localLastRestaurantId = atoi(temp.c_str());
 
     return packet;
 }
 
 
-GetRestaurantPacket ProtocolParser::parseGetRestaurantPacket(int index, QString data) {
-    QString temp;
+GetRestaurantPacket ProtocolParser::parseGetRestaurantPacket(int index, std::string data) {
+    std::string temp;
     GetRestaurantPacket packet;
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        temp.append(data[index]);
+        temp += data[index];
     }
 
-    packet.toUpdateRestaurantId = temp.toInt();
+    packet.toUpdateRestaurantId = atoi(temp.c_str());
 
     return packet;
 }
 
-GetCommentsPacket ProtocolParser::parseGetCommentsPacket(int index, QString data ) {
-    QString temp;
+GetCommentsPacket ProtocolParser::parseGetCommentsPacket(int index, std::string data ) {
+    std::string temp;
     GetCommentsPacket packet;
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        temp.append(data[index]);
+        temp += data[index];
     }
 
-    packet.restaurantId = temp.toInt();
+    packet.restaurantId = atoi(temp.c_str());
     ++index;
 
     for(; data[index] != '\n'; ++index) {
-        packet.addedDate.append(data[index]);
+        packet.addedDate+=data[index];
     }
 
     return packet;
 }
 
 
-AddCommentPacket ProtocolParser::parseAddCommentPacket(int index, QString data ) {
-    QString temp;
+AddCommentPacket ProtocolParser::parseAddCommentPacket(int index, std::string data ) {
+    std::string temp;
     AddCommentPacket packet;
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        temp.append(data[index]);
+        temp+=data[index];
     }
 
-    packet.userId = temp.toInt();
+    packet.userId = atoi(temp.c_str());
     temp.clear();
     ++index;
 
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        temp.append(data[index]);
+        temp+=data[index];
     }
 
-    packet.restaurantId = temp.toInt();
+    packet.restaurantId = atoi(temp.c_str());
     ++index;
 
     for(; data[index] != '\n'; ++index) {
-        packet.date.append(data[index]);
+        packet.date+=data[index];
     }
     ++index;
 
     for(; data[index] != '\n'; ++index) {
-        packet.text.append(data[index]);
+        packet.text+=data[index];
     }
 
     return packet;
 }
 
 
-AddRestaurantPacket ProtocolParser::parseAddRestaurantPacket(int index, QString data ) {
+AddRestaurantPacket ProtocolParser::parseAddRestaurantPacket(int index, std::string data ) {
     AddRestaurantPacket packet;
 
     for(; data[index] != '\n'; ++index) {
-        packet.restaurantName.append(data[index]);
+        packet.restaurantName+=data[index];
     }
     ++index;
 
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        packet.restaurantAdress.append(data[index]);
+        packet.restaurantAdress+=data[index];
     }
     ++index;
 
     for(; data[index] != '\n'; ++index) {
         if( data[index] == ' ' )
             throw new BadPackageException();
-        packet.restaurantType.append(data[index]);
+        packet.restaurantType+=data[index];
     }
 
     return packet;
 }
 
 
-DeleteCommentPacket ProtocolParser::parseDeleteCommentPacket(int index, QString data ) {
-    QString temp;
+DeleteCommentPacket ProtocolParser::parseDeleteCommentPacket(int index, std::string data ) {
+    std::string temp;
     DeleteCommentPacket packet;
     for(; data[index] != '\n'; ++index) {
         if(data[index] < '0' || data[index] > '9')
             throw new BadPackageException();
-        temp.append(data[index]);
+        temp+=data[index];
     }
 
-    packet.commentId = temp.toInt();
+    packet.commentId = atoi(temp.c_str());
 
     return packet;
 }
@@ -252,7 +252,7 @@ SendNextPacket ProtocolParser::parseSendNextPacket() {
 //////////////////////////////////////////////////////////////////Out///////////////////////////////////////////////////
 
 int ProtocolParser::parseOut(Pakiet packet) {
-    QString toSend;
+    std::string toSend;
     switch((PacketType)packet.id) {
         case RESPONSE_ADD_USER:
             toSend = this->parsePacketOut(static_cast<ResponseAddUserPacket&>(packet));
@@ -289,9 +289,9 @@ int ProtocolParser::parseOut(Pakiet packet) {
 
 }
 
-QString intToStr(int n)
+std::string intToStr(int n)
 {
-     QString tmp, ret;
+     std::string tmp, ret;
      if(n < 0) {
           ret = "-";
           n = -n;
@@ -306,15 +306,15 @@ QString intToStr(int n)
      return ret;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
+    std::string response,temp;
     temp += "13";
     temp += '\n';
 
     temp += intToStr(packet.commentId);
     temp += '\n';
 
-    response.append(temp.size());
+    response += temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
@@ -322,23 +322,23 @@ QString ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
+    std::string response,temp;
     temp += "15";
     temp += '\n';
 
     temp += intToStr(packet.restaurantId);
     temp += '\n';
 
-    response.append(temp.size());
+    response += temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
+    std::string response,temp;
     temp += "3";
     temp += '\n';
 
@@ -349,27 +349,27 @@ QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     response += '\n';
     response += temp;
     //this->encryption(response);
-    qDebug()<<"Pakiet do wyslania1 "<<response;
+    std::cout<<"Pakiet do wyslania1 "<<response;
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet) {
+    std::string response,temp;
     temp += "5";
     temp += '\n';
 
     temp += intToStr(packet.globalLastRestaurantId);
     temp += '\n';
 
-    response.append(temp.size());
+    response+=temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
+    std::string response,temp;
     temp += "11";
     temp += '\n';
 
@@ -382,15 +382,15 @@ QString ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
     temp += packet.date;
     temp += '\n';
 
-    response.append(temp.size());
+    response+=temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
+    std::string response,temp;
     temp += "7";
     temp += '\n';
 
@@ -408,59 +408,59 @@ QString ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
 
     std::cout<<"Wyslano RESPONSEGETRESTAURANT"<<std::endl;
 
-    response.append(temp.size());
+    response+=temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(PingPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(PingPacket packet) {
+    std::string response,temp;
     temp += "0";
     temp += '\n';
 
     temp += intToStr(packet.userId);
     temp += '\n';
 
-    response.append(temp.size());
+    response+=temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePacketOut(ResponseDeleteCommentPacket packet) {
-    QString response,temp;
+std::string ProtocolParser::parsePacketOut(ResponseDeleteCommentPacket packet) {
+    std::string response,temp;
     temp += "8";
     temp += '\n';
     (packet.ifDeleted == true ? temp += "1" : temp +="0" );
     temp += '\n';
 
-    response.append(temp.size());
+    response+=temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePacketEndOfData() {
-    QString response,temp;
+std::string ProtocolParser::parsePacketEndOfData() {
+    std::string response,temp;
     temp +="9";
     temp += '\n';
     temp +="sth";
     temp += '\n';
 
     std::cout<<"Wyslano END_OF_DATA";
-    response.append(temp.size());
+    response+=temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
     return response;
 }
 
-QString ProtocolParser::parsePingPacket() {
-    QString response,temp;
+std::string ProtocolParser::parsePingPacket() {
+    std::string response,temp;
     temp += "1";
     temp += '\n';
 
@@ -476,15 +476,16 @@ void ProtocolParser::deencryption(char* data) {
 
 }
 
-void ProtocolParser::encryption(QString& data) {
-    char* text = (char*) data.toStdString().c_str();
+void ProtocolParser::encryption(std::string& data) {
+//    char* text =  data.c_str();
+    char* text;
     int key = 5;
 
     for(int i=0; i< strlen(text); ++i){
         text[i] = text[i] + key;
     }
 
-    data = QString(text);
+    data = std::string(text);
 
 }
 

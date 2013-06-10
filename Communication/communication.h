@@ -20,7 +20,7 @@ public:
     ~Communication();
     
     void run();
-    void sendData(QString message);
+    void sendData(std::string message);
 };
 
 #endif // COMMUNICATION_H

@@ -83,30 +83,30 @@ int TcpSocket::sendPackage(std::string message) {
     return message.size();
 }
 
-int TcpSocket::sendPackage(QString message) {
-    qDebug()<<"wiadomosc do wyslania to: "<<message;
-    int operation;
-    for(int i = 0; i < message.size(); ++i) {
-        QChar ch = message[i];
-        operation = send(this->sock, &ch, 2,0);
-        if (operation == -1) {
-            std::cout<<"Wystapil blad podczas wysylania pakietu!\n";
-            return -1;
-        }
-    }
+//int TcpSocket::sendPackage(std::string message) {
+//    std::cout<<"wiadomosc do wyslania to: "<<message;
+//    int operation;
+//    for(int i = 0; i < message.size(); ++i) {
+//        QChar ch = message[i];
+//        operation = send(this->sock, &ch, 2,0);
+//        if (operation == -1) {
+//            std::cout<<"Wystapil blad podczas wysylania pakietu!\n";
+//            return -1;
+//        }
+//    }
 
-    return message.size();
-}
+//    return message.size();
+//}
 
 bool TcpSocket::checkIfInvalid() {
     return this->sock == -1;
 }
 
-int TcpSocket::receivePackage(QString& input) {
+int TcpSocket::receivePackage(std::string& input) {
     input.clear();
     int operation;
-    QChar mSize[3];
-    QString temp;
+    char mSize[3];
+    std::string temp;
     int size;
     char data;
     bool goOut = false;
@@ -123,18 +123,18 @@ int TcpSocket::receivePackage(QString& input) {
                 break;
             case 1:
                 temp += mSize[0];
-                size = temp.toInt();
+                size = atoi(temp.c_str());
                 break;
             case 2:
                 temp += mSize[0];
                 temp += mSize[1];
-                size = temp.toInt();
+                size = atoi(temp.c_str());
                 break;
             case 3:
                 temp += mSize[0];
                 temp += mSize[1];
                 temp += mSize[2];
-                size = temp.toInt();
+                size = atoi(temp.c_str());
                 break;
             }
 
@@ -154,7 +154,7 @@ int TcpSocket::receivePackage(QString& input) {
             std::cout<<"Wystapil blad podczas odbierania pakietu!\n";
             return -1;
         }
-        input.append(data);
+        input += data;
     }
 
     return input.size();

@@ -12,49 +12,49 @@ class ProtocolParser
 private:
 //    Deserializacja* deserialization;
     TcpSocket* tcpsocket;
-    PacketType readPacketType(int& index, QString data);
+    PacketType readPacketType(int& index, std::string data);
 
     ////////////////////////////////////////////////////////////IN//////////////////////////////////////////////////////////////////////
     PacketType readPacketType(int& index);
 
-    AddUserPacket parseUserPacket(int index, QString data);
+    AddUserPacket parseUserPacket(int index, std::string data);
 
-    CheckRestaurantPacket parseCheckRestaurantPacket(int index, QString data);
+    CheckRestaurantPacket parseCheckRestaurantPacket(int index, std::string data);
 
-    GetRestaurantPacket parseGetRestaurantPacket(int index, QString data);
+    GetRestaurantPacket parseGetRestaurantPacket(int index, std::string data);
 
-    GetCommentsPacket parseGetCommentsPacket(int index, QString data);
+    GetCommentsPacket parseGetCommentsPacket(int index, std::string data);
 
-    AddCommentPacket parseAddCommentPacket(int index, QString data );
+    AddCommentPacket parseAddCommentPacket(int index, std::string data );
 
-    AddRestaurantPacket parseAddRestaurantPacket(int index, QString data );
+    AddRestaurantPacket parseAddRestaurantPacket(int index, std::string data );
 
-    DeleteCommentPacket parseDeleteCommentPacket(int index, QString data );
+    DeleteCommentPacket parseDeleteCommentPacket(int index, std::string data );
 
 
     SendNextPacket parseSendNextPacket();
     /////////////////////////////////////////////////////////////////OUT/////////////////////////////////////////////////////////////////////
 
-    QString parsePacketOut(ResponseAddCommentPacket);
-    QString parsePacketOut(ResponseAddRestaurantPacket);
-    QString parsePacketOut(ResponseAddUserPacket);
-    QString parsePacketOut(ResponseCheckRestaurantPacket);
-    QString parsePacketOut(ResponseGetCommentsPacket);
-    QString parsePacketOut(ResponseGetRestaurantPacket);
-    QString parsePacketOut(PongPacket);
-    QString parsePacketOut(ResponseDeleteCommentPacket);
-    QString parsePacketOut(PingPacket packet);
-    QString parsePacketEndOfData();
-    QString parsePingPacket();
+    std::string parsePacketOut(ResponseAddCommentPacket);
+    std::string parsePacketOut(ResponseAddRestaurantPacket);
+    std::string parsePacketOut(ResponseAddUserPacket);
+    std::string parsePacketOut(ResponseCheckRestaurantPacket);
+    std::string parsePacketOut(ResponseGetCommentsPacket);
+    std::string parsePacketOut(ResponseGetRestaurantPacket);
+    std::string parsePacketOut(PongPacket);
+    std::string parsePacketOut(ResponseDeleteCommentPacket);
+    std::string parsePacketOut(PingPacket packet);
+    std::string parsePacketEndOfData();
+    std::string parsePingPacket();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     void deencryption(char* data);
-    void encryption(QString& data);
+    void encryption(std::string& data);
 public:
     ProtocolParser(TcpSocket* sock);
     ~ProtocolParser();
-    int parseIn(QString data);
+    int parseIn(std::string data);
 
     int parseOut(Pakiet packet);
 
