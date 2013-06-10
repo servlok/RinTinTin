@@ -93,7 +93,7 @@ PacketType ProtocolParser::readPacketType(int& index,QString data) {
     ++index;
 
 
-    int value = (PacketType)(packetType.toInt());
+    int value = packetType.toInt();
     if ( value < 0 || value > 17) throw new BadPackageException();
 
     return (PacketType)value;
@@ -345,10 +345,11 @@ QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     temp += intToStr(packet.userId);
     temp += '\n';
 
-    response.append(temp.size());
+    response += temp.size();
     response += '\n';
     response += temp;
     //this->encryption(response);
+    qDebug()<<"Pakiet do wyslania1 "<<response;
     return response;
 }
 
