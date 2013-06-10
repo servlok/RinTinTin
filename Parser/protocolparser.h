@@ -35,9 +35,9 @@ private:
     SendNextPacket parseSendNextPacket();
     /////////////////////////////////////////////////////////////////OUT/////////////////////////////////////////////////////////////////////
 
-    std::string parsePacketOut(ResponseAddCommentPacket);
+    QString parsePacketOut(ResponseAddCommentPacket);
     QString parsePacketOut(ResponseAddRestaurantPacket);
-    std::string parsePacketOut(ResponseAddUserPacket);
+    QString parsePacketOut(ResponseAddUserPacket);
     QString parsePacketOut(ResponseCheckRestaurantPacket);
     QString parsePacketOut(ResponseGetCommentsPacket);
     QString parsePacketOut(ResponseGetRestaurantPacket);

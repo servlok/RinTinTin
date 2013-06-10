@@ -252,31 +252,31 @@ SendNextPacket ProtocolParser::parseSendNextPacket() {
 //////////////////////////////////////////////////////////////////Out///////////////////////////////////////////////////
 
 int ProtocolParser::parseOut(Pakiet packet) {
-    std::string toSend;
+    QString toSend;
     switch((PacketType)packet.id) {
         case RESPONSE_ADD_USER:
             toSend = this->parsePacketOut(static_cast<ResponseAddUserPacket&>(packet));
             break;
         case RESPONSE_RESTAURANT:
-//            toSend = this->parsePacketOut(static_cast<ResponseCheckRestaurantPacket&>(packet));
+            toSend = this->parsePacketOut(static_cast<ResponseCheckRestaurantPacket&>(packet));
             break;
         case RESPONSE_GET_RESTAURANT :
-//            toSend = this->parsePacketOut(static_cast<ResponseGetRestaurantPacket&>(packet));
+            toSend = this->parsePacketOut(static_cast<ResponseGetRestaurantPacket&>(packet));
             break;
         case RESPONSE_GET_COMMENTS :
-//            toSend = this->parsePacketOut(static_cast<ResponseGetCommentsPacket&>(packet));
+            toSend = this->parsePacketOut(static_cast<ResponseGetCommentsPacket&>(packet));
             break;
         case RESPONSE_ADD_COMMENT :
-//            toSend = this->parsePacketOut(static_cast<ResponseAddCommentPacket&>(packet));
+            toSend = this->parsePacketOut(static_cast<ResponseAddCommentPacket&>(packet));
             break;
         case RESPONSE_ADD_RESTAURANT :
-//            toSend = this->parsePacketOut(static_cast<ResponseAddRestaurantPacket&>(packet));
+            toSend = this->parsePacketOut(static_cast<ResponseAddRestaurantPacket&>(packet));
             break;
         case RESPONSE_DELETE_COMMENT :
-//            toSend = this->parsePacketOut(static_cast<ResponseDeleteCommentPacket&>(packet));
+            toSend = this->parsePacketOut(static_cast<ResponseDeleteCommentPacket&>(packet));
             break;
         case END_OF_DATA :
-//            toSend = this->parsePacketEndOfData();
+            toSend = this->parsePacketEndOfData();
             break;
         default :
             std::cout<<"Obecnie wyslanie pakietu jest nie obslugiwane\n";
@@ -306,15 +306,15 @@ QString intToStr(int n)
      return ret;
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
-    std::string response,temp;
+QString ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
+    QString response,temp;
     temp += "13";
     temp += '\n';
 
-    temp += packet.commentId;
+    temp += intToStr(packet.commentId);
     temp += '\n';
 
-    response += temp.size();
+    response.append(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
@@ -337,8 +337,8 @@ QString ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
     return response;
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
-    std::string response,temp;
+QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
+    QString response,temp;
     temp += "3";
     temp += '\n';
 
@@ -349,7 +349,7 @@ std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     response += '\n';
     response += temp;
     //this->encryption(response);
-    std::cout<<"Pakiet do wyslania1 "<<response;
+    qDebug()<<"Pakiet do wyslania1 "<<response;
     return response;
 }
 
