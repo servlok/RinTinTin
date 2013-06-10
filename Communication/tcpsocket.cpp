@@ -69,18 +69,27 @@ int TcpSocket::acceptSocket() {
 }
 
 
-int TcpSocket::sendPackage(std::string message) {
-    int operation;
-    for(unsigned int i = 0; i < message.size(); ++i) {
-        char ch = message[i];
-        operation = send(this->sock, &ch, 1, 0);
-        if (operation == -1) {
-            std::cout<<"Wystapil blad podczas wysylania pakietu!\n";
-            return -1;
-        }
-    }
+void TcpSocket::sendPackage(std::string message) {
+    unsigned int ileWyslano = 0;
+    unsigned int nowaPartia = 0;
+    const char* co = message.c_str();
+    int rozmiar = message.size();
+    fd_set writefds;
+    while (ileWyslano < rozmiar) {
 
-    return message.size();
+
+    FD_ZERO(&writefds);
+    FD_SET(this->sock,&writefds);
+
+
+    if(select(this->sock+1,NULL,&writefds,NULL,NULL)){
+         nowaPartia = write(this->sock, co, rozmiar- ileWyslano);
+          if (nowaPartia != -1) {
+                    ileWyslano += nowaPartia;
+                    co += nowaPartia;
+                }
+            }
+        }
 }
 
 //int TcpSocket::sendPackage(std::string message) {

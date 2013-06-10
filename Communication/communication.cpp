@@ -61,10 +61,7 @@ void Communication::run() {
 }
 
 void Communication::sendData(std::string message) {
-    if( this->tcpsocket->sendPackage(message) == -1 ) {
-        std::cout<<"Wystapil blad z wysylaniem pakietow!\n";
-        this->goOutC = true;
-    }
+    this->tcpsocket->sendPackage(message);
 }
 
 Communication::~Communication() {

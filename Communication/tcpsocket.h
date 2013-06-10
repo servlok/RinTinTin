@@ -40,7 +40,7 @@ public:
 
     int receivePackage(std::string& input);
 
-    int sendPackage(std::string message);
+    void sendPackage(std::string message);
 //    int sendPackage(std::string message);
     void set(int newTime);
 

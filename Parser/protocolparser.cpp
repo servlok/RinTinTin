@@ -257,6 +257,7 @@ int ProtocolParser::parseOut(Pakiet packet) {
     switch((PacketType)packet.id) {
         case RESPONSE_ADD_USER:
             toSend = this->parsePacketOut(static_cast<ResponseAddUserPacket&>(packet));
+            std::cout<<"Wysylam pakiet RESPONSE_ADD_USER"<<std::endl;
             break;
         case RESPONSE_RESTAURANT:
             toSend = this->parsePacketOut(static_cast<ResponseCheckRestaurantPacket&>(packet));
