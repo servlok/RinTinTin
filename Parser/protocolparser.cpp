@@ -342,7 +342,7 @@ QString ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     temp += "3";
     temp += '\n';
 
-    temp += intToStr(packet.userId);
+    temp += packet.userId;
     temp += '\n';
 
     response += temp.size();
