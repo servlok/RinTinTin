@@ -316,7 +316,7 @@ std::string ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
     temp += intToStr(packet.commentId);
     temp += '\n';
 
-    response += temp.size();
+    response += intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
@@ -344,10 +344,10 @@ std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     temp += "3";
     temp += '\n';
 
-    temp += packet.userId;
+    temp += intToStr(packet.userId);
     temp += '\n';
 
-    response += temp.size();
+    response += intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
