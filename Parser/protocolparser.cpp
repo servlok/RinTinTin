@@ -32,6 +32,9 @@ int ProtocolParser::parseIn(std::string data) {
         case ADD_USER :
             packet = this->parseUserPacket(index,data);
             std::cout<<"Otrzymano pakiet ADD_USER\n";
+            ResponseAddUserPacket packet;
+            packet.userId = 20;
+            this->parseOut(packet);
             break;
         case CHECK_RESTAURANT :
             packet = this->parseCheckRestaurantPacket(index,data);
@@ -63,9 +66,7 @@ int ProtocolParser::parseIn(std::string data) {
             break;
         default :
             std::cout<<"Obecnie odebranie pakietu jest nie obslugiwane\n";
-            ResponseAddUserPacket packet;
-            packet.userId = 20;
-            this->parseOut(packet);
+
             return 1;
             break;
         }
