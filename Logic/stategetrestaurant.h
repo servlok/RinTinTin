@@ -1,15 +1,15 @@
 #ifndef STATEGETRESTAURANT_H
 #define STATEGETRESTAURANT_H
 #include <vector>
-#include "pakiet.h"
+#include "../Deserialization/pakiet.h"
 class StateGetRestaurant
 {
     std::vector<ResponseGetRestaurantPacket> baza;
 public:
     StateGetRestaurant();
     void start(std::vector<ResponseGetRestaurantPacket> baza);
-    ResponseGetRestaurantPacket StateGetRestaurant::rotate();
-    bool StateGetRestaurant::ifRotate();
+    ResponseGetRestaurantPacket rotate();
+    bool ifRotate();
 };
 
 #endif // STATEGETRESTAURANT_H

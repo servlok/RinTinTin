@@ -1,13 +1,31 @@
+#pragma once
 #include "logika.h"
-#include "QDebug"
-Logika::Logika()
+#include <QDebug>
+#include <iostream>
+#include "../Deserialization/deserializacja.h"
+Logika::Logika(Deserializacja* deserializacja)
 {
-   // this->des=des;
+    des= deserializacja;
+    doa = new DataAccessObject();
     state = 0;
 }
 
+Logika::~Logika() {
+    delete doa;
+}
 
-void Logika::Service(pakiet *pakietRevice)
+void Logika::set(Deserializacja  *nowa)
+{
+    this->des = nowa;
+}
+
+void Logika::setDB(DataAccessObject *db)
+{
+    this->doa=db;
+}
+
+
+void Logika::Service(Pakiet *pakietRevice)
 {
     switch(pakietRevice->id)
     {case 0:
@@ -21,11 +39,17 @@ void Logika::Service(pakiet *pakietRevice)
     case 2:
         {
         if(state==0)
-            {//doa.addUser(pakietRevice);
-            AddUserPacket dostalem;
-            ResponseAddUserPacket lol = doa.addUser(dostalem);
-          //  des->responseAddUser(lol);
-            //wywolanie metody response add user
+            {
+
+
+            AddUserPacket nowy;
+            nowy.login=pakietRevice->stringi()[0];
+            nowy.password=pakietRevice->stringi()[1];
+
+            ResponseAddUserPacket lol = doa->addUser(nowy);
+
+
+            this->des->ResponseAddUser(lol);
 
                 }
         }break;
@@ -35,9 +59,10 @@ void Logika::Service(pakiet *pakietRevice)
         }break;
     case 4:
         {
-        if(state=0){
-           ResponseCheckRestaurantPacket wynik= doa.findNewestRestaurant();
-         //  des->responseFindNewestRestaurant(wynik);
+        if(state==0){
+           ResponseCheckRestaurantPacket wynik= doa->findNewestRestaurant();
+        this->des->ResponseCheckRestaurant(wynik);
+
             }
         }break;
     case 5:
@@ -46,22 +71,23 @@ void Logika::Service(pakiet *pakietRevice)
         }break;
     case 6:
     {  qDebug()<<"wszedlem do 6";
-        if(state ==0){
+        if(state ==0) {
              qDebug()<<"wszedlem do 6 state 1 ";
             state = 1;
 
-            restaurant.start(doa.getRestaurant());
+            restaurant.start(doa->getRestaurant());
 
             if(!restaurant.ifRotate())
             {
-                //wyslanie end of data
+                this->des->EndOfData();
                 state =0;
                   qDebug()<<"if rotate tak";
             }
             else
             {
-               ResponseGetRestaurantPacket nowy = restaurant.rotate();//wyslanie restauracji
-               qDebug()<<nowy.restaurantName;
+               ResponseGetRestaurantPacket nowy = restaurant.rotate();//WYSLANIE LISTY
+               this->des->ResponseGetRestaurant(nowy);
+               std::cout<<nowy.restaurantName;
             }
 
         }
@@ -77,29 +103,31 @@ void Logika::Service(pakiet *pakietRevice)
         {
             if(!restaurant.ifRotate())
             {
-                //wyslanie end of data
+               this->des->EndOfData();
                 state = 0;
                 qDebug()<<"if rotate tak";
             }
             else
             {
-                qDebug()<<"if rotate nie";
-                ResponseGetRestaurantPacket nowy = restaurant.rotate();//wyslanie restauracji
-                qDebug()<<nowy.restaurantName;
+                std::cout<<"if rotate nie";
+                ResponseGetRestaurantPacket nowy = restaurant.rotate();//WYSLANIE LISTY
+                this->des->ResponseGetRestaurant(nowy);
+                std::cout<<nowy.restaurantName;
             }
         }
         else if(state == 2)
         {
             if(!comments.ifRotate())
             {
-                //wyslanie end of data
+                //WYSLANIE END OF DATA
                 state = 0;qDebug()<<"if rotate tak";
             }
             else
             {
                 ResponseGetCommentsPacket nowy;
-             nowy = comments.rotate();//wyslanie restauracji
-             qDebug()<<"if rotate nie"<<nowy.text;
+             nowy = comments.rotate();//WYSLANIE LISTY
+             this->des->ResponseGetComments(nowy);
+             std::cout<<"if rotate nie"<<nowy.text;
             }
         }
         }break;
@@ -111,23 +139,29 @@ void Logika::Service(pakiet *pakietRevice)
         }break;
     case 10:
         {
+        if(state ==0){
         state = 2;
-        GetCommentsPacket nowe;///przejsciowe
-        nowe.addedDate="0";
-        nowe.restaurantId=1;
-        comments.start(doa.getComment(nowe));
+        GetCommentsPacket nowe;
+
+        nowe.addedDate=pakietRevice->stringi()[0];
+        nowe.restaurantId=pakietRevice->inty()[1];
+        nowe.commentId=pakietRevice->inty()[0];
+        qDebug()<<doa->getComment(nowe).size()<<"SRSLY?!?!?!?!?";
+        comments.start(doa->getComment(nowe));
 
         if(!comments.ifRotate())
         {
-            //wyslanie end of data
+            this->des->EndOfData();
             state =0;
             qDebug()<<"rotate TAK";
         }
         else
         {qDebug()<<"rotate NIE";
             ResponseGetCommentsPacket nowy;
-            nowy =comments.rotate();//wyslanie restauracji
-            qDebug()<<"KAKAKAKAK"<<nowy.text;
+            nowy =comments.rotate();
+            this->des->ResponseGetComments(nowy);
+            std::cout<<"KAKAKAKAK"<<nowy.text;
+        }
         }
         }break;
     case 11:
@@ -138,8 +172,14 @@ void Logika::Service(pakiet *pakietRevice)
         {
         if(state ==0)
         {
-            AddCommentPacket nowy;//tymaczsowe
-            doa.addComment(nowy);
+            AddCommentPacket nowy;
+            nowy.date=pakietRevice->stringi()[0];
+            nowy.text=pakietRevice->stringi()[1];
+
+            nowy.restaurantId=pakietRevice->inty()[0];
+            nowy.userId=pakietRevice->inty()[1];
+
+            this->des->ResponseAddComment(doa->addComment(nowy));
         }
         }break;
     case 13:
@@ -150,8 +190,12 @@ void Logika::Service(pakiet *pakietRevice)
         {
             if(state ==0)
             {
-                AddRestaurantPacket nowy;//tymaczsowe
-                doa.addRestaurant(nowy);
+                AddRestaurantPacket nowy;
+                nowy.restaurantAdress = pakietRevice->stringi()[0];
+                nowy.restaurantType = pakietRevice->stringi()[1];
+                nowy.restaurantName = pakietRevice->stringi()[2];
+
+                this->des->ResponseAddRestaurant(doa->addRestaurant(nowy));
             }
         }break;
     case 15:
@@ -162,8 +206,10 @@ void Logika::Service(pakiet *pakietRevice)
         {
             if(state ==0)
             {
-                DeleteCommentPacket nowy;//tymaczsowe
-                doa.deleteComment(nowy);
+                DeleteCommentPacket nowy;
+                nowy.commentId=pakietRevice->inty()[0];
+
+                this->des->ResponseDeleteComment(doa->deleteComment(nowy));
             }
         }break;
     case 17:

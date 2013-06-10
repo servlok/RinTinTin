@@ -7,7 +7,7 @@ StateGetComments::StateGetComments()
 void StateGetComments::start(std::vector<ResponseGetCommentsPacket> baza)
 {
     this->baza=baza;
-    qDebug()<<"start";
+    qDebug()<<"starAAAAAAAAAAAAAAAt"<<baza.size();
 }
 
 ResponseGetCommentsPacket StateGetComments::rotate()
@@ -24,7 +24,7 @@ ResponseGetCommentsPacket StateGetComments::rotate()
 
 bool StateGetComments::ifRotate()
 {
-    qDebug()<<"IFrotate";
+    qDebug()<<"IFrotate"<<baza.size();
    if(baza.size())
         return true;
    else

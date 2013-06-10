@@ -2,7 +2,7 @@
 #define PROTOCOLPARSER_H
 
 #include "packettype.h"
-//#include "../Deserialization/deserializacja.h"
+#include "../Deserialization/deserializacja.h"
 #include "../Deserialization/pakiet.h"
 #include "../Communication/tcpsocket.h"
 
@@ -10,7 +10,8 @@
 class ProtocolParser
 {
 private:
-//    Deserializacja* deserialization;
+    friend class Deserializacja;
+    Deserializacja* deserialization;
     TcpSocket* tcpsocket;
     PacketType readPacketType(int& index, std::string data);
 
@@ -35,17 +36,17 @@ private:
     SendNextPacket parseSendNextPacket();
     /////////////////////////////////////////////////////////////////OUT/////////////////////////////////////////////////////////////////////
 
-    std::string parsePacketOut(ResponseAddCommentPacket);
-    std::string parsePacketOut(ResponseAddRestaurantPacket);
-    std::string parsePacketOut(ResponseAddUserPacket);
-    std::string parsePacketOut(ResponseCheckRestaurantPacket);
-    std::string parsePacketOut(ResponseGetCommentsPacket);
-    std::string parsePacketOut(ResponseGetRestaurantPacket);
-    std::string parsePacketOut(PongPacket);
-    std::string parsePacketOut(ResponseDeleteCommentPacket);
-    std::string parsePacketOut(PingPacket packet);
-    std::string parsePacketEndOfData();
-    std::string parsePingPacket();
+    void parsePacketOut(ResponseAddCommentPacket);
+    void parsePacketOut(ResponseAddRestaurantPacket);
+    void parsePacketOut(ResponseAddUserPacket);
+    void parsePacketOut(ResponseCheckRestaurantPacket);
+    void parsePacketOut(ResponseGetCommentsPacket);
+    void parsePacketOut(ResponseGetRestaurantPacket);
+    void parsePacketOut(PongPacket);
+    void parsePacketOut(ResponseDeleteCommentPacket);
+    void parsePacketOut(PingPacket packet);
+    void parsePacketEndOfData();
+    void parsePingPacket();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -55,8 +56,6 @@ public:
     ProtocolParser(TcpSocket* sock);
     ~ProtocolParser();
     int parseIn(std::string data);
-
-    int parseOut(Pakiet packet);
 
 };
 

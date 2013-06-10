@@ -1,104 +1,169 @@
+#pragma once
 #include "deserializacja.h"
 #include <QDebug>
+#include <iostream>
+#include "../Logic/logika.h"
 
 
-Deserializacja::Deserializacja()
+Deserializacja::Deserializacja(ProtocolParser* parser)
 {
-    Logic = new Logika();
+   logic = new Logika(this);
+   this->parser = parser;
 
 
 }
 
+Deserializacja::~Deserializacja(){
+    delete logic;
+}
 
-int Deserializacja::start(pakiet *pakietRevice)
+void Deserializacja::set(Logika *nowa)
+{
+    this->logic=nowa;
+}
+
+
+int Deserializacja::start(Pakiet *pakietRevice)
 {
 
     switch(pakietRevice->id)
     {case 0:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 1:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 2:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 3:
     {
-      qDebug()<<"bla1"<<pakietRevice->id;
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 4:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 5:
     {
-    qDebug()<<"bla1"<<pakietRevice->id;
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
 
     case 6:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 7:
     {
-        AddUserPacket nowy;
-        nowy.login="test!11";
-        nowy.password="tajne haslo!";
-
-        qDebug()<<"bla1"<<pakietRevice->id;
-        baza.addUser(nowy);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
+       // baza.addUser(nowy);
     }break;
     case 8:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+         logic->Service(pakietRevice);
+         std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 9:
     {
-      qDebug()<<"bla1"<<pakietRevice->id;
+         std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 10:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+         logic->Service(pakietRevice);
+         std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 11:
     {
-    qDebug()<<"bla1"<<pakietRevice->id;
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
 
     case 12:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 13:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 14:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 15:
     {
-      qDebug()<<"bla1"<<pakietRevice->id;
+      std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 16:
     {
-        qDebug()<<"bla1"<<pakietRevice->id;
+        logic->Service(pakietRevice);
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
     case 17:
     {
-    qDebug()<<"bla1"<<pakietRevice->id;
+        std::cout<<"Przekazuje do sterowania pakiet: "<<pakietRevice->id<<std::endl;
     }break;
 
     }
 
-
-return 1;
+    return 1;
 }
+
+void Deserializacja::ResponseAddUser(ResponseAddUserPacket pakjet)
+{
+    parser->parsePacketOut(pakjet);
+    std::cout<<"Wywolano response dla "<<pakjet.userId<<std::endl;
+}
+
+void Deserializacja::ResponseCheckRestaurant(ResponseCheckRestaurantPacket pakjet)
+{
+    parser->parsePacketOut(pakjet);
+    std::cout<<"Wywolano response dla"<<pakjet.globalLastRestaurantId<<" "<<pakjet.globalRestaurantSize<<std::endl;
+}
+////
+void Deserializacja::ResponseAddComment(ResponseAddCommentPacket pakjet)
+{
+    parser->parsePacketOut(pakjet);
+    std::cout<<"Wywolano response dla "<<pakjet.commentId<<std::endl;
+}
+
+void Deserializacja::ResponseAddRestaurant(ResponseAddRestaurantPacket pakjet)
+{
+    parser->parsePacketOut(pakjet);
+    std::cout<<"Wywolano response dla "<<pakjet.restaurantId<<std::endl;
+}
+void Deserializacja::ResponseDeleteComment(ResponseDeleteCommentPacket pakjet)
+{
+    parser->parsePacketOut(pakjet);
+    std::cout<<"Wywolano response dla "<<pakjet.ifDeleted<<std::endl;
+}
+
+void Deserializacja::ResponseGetComments(ResponseGetCommentsPacket pakjet)
+{
+    //wywolanie metody z wartwy nizej z argumentem pakjet
+    std::cout<<"Wywolano response dla "<<pakjet.text<<std::endl;
+}
+
+void Deserializacja::ResponseGetRestaurant(ResponseGetRestaurantPacket pakjet)
+{
+    parser->parsePacketOut(pakjet);
+    std::cout<<"Wywolano response dla "<<pakjet.restaurantName<<std::endl;
+}
+
+void Deserializacja::EndOfData()
+{
+    parser->parsePacketEndOfData();
+    std::cout<<"Wywolano response dla "<<"END OF DATA\n";
+}
+
 
 
 

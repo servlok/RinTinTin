@@ -70,4 +70,5 @@ Communication::~Communication() {
         pool->clear(*tcpsocket);
         delete tcpsocket;
     }
+    delete parser;
 }

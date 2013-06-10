@@ -1,17 +1,41 @@
-#ifndef DESERIALIZACJA_H
-#define DESERIALIZACJA_H
+#pragma once
 #include "pakiet.h"
 #include "../Logic/logika.h"
-#include "dataaccessobject.h"
+#include "../Logic/dataaccessobject.h"
+#include "../Parser/protocolparser.h"
+
+class ProtocolParser;
 
 class Deserializacja
 {
+
 public:
-    Logika * Logic;
-    Deserializacja();
-    //TODO Wskaznik na warstwe nizej
-    int start(pakiet *pakietRevice);
-    DataAccessObject baza;
+    void set(Logika * nowa);
+    Logika * logic;
+    Deserializacja(ProtocolParser *parser);
+    ~Deserializacja();
+    ProtocolParser* parser;
+    int start(Pakiet *pakietRevice);
+    void ResponseAddUser(ResponseAddUserPacket pakjet);
+
+    void ResponseCheckRestaurant(ResponseCheckRestaurantPacket pakjet);
+
+    void ResponseAddComment(ResponseAddCommentPacket pakjet);
+
+    void ResponseAddRestaurant(ResponseAddRestaurantPacket pakjet);
+
+    void ResponseDeleteComment(ResponseDeleteCommentPacket pakjet);
+
+    void ResponseGetComments(ResponseGetCommentsPacket pakjet);
+
+    void ResponseGetRestaurant(ResponseGetRestaurantPacket pakjet);
+
+    void EndOfData();
+
+
+
+
+
 };
 
-#endif // DESERIALIZACJA_H
+

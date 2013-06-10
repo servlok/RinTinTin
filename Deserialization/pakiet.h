@@ -1,6 +1,6 @@
-#ifndef PAKIET_H
-#define PAKIET_H
+#pragma once
 #include <string>
+#include <vector>
 /*
  *	PING = 0,
     PONG = 1,
@@ -29,6 +29,8 @@ public:
     Pakiet();
 
        virtual ~Pakiet() {}
+    virtual std::vector<std::string> stringi(){return std::vector<std::string>();}
+    virtual std::vector<int> inty(){return std::vector<int>();}
 };
 
 
@@ -37,6 +39,8 @@ class PingPacket : public Pakiet {
     public:
     PingPacket();
     int userId;
+     std::vector<std::string> stringi();
+     std::vector<int> inty() ;
 
 };
 
@@ -44,6 +48,8 @@ class PongPacket : public Pakiet {
     public:
     PongPacket();
     int userId;
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 
 };
 
@@ -52,18 +58,27 @@ class AddUserPacket : public Pakiet {
     AddUserPacket();
     std::string login;
     std::string password;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class ResponseAddUserPacket : public Pakiet {
     public:
     ResponseAddUserPacket();
     int userId;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class CheckRestaurantPacket : public Pakiet {
     public:
     CheckRestaurantPacket();
     int localLastRestaurantId;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class ResponseCheckRestaurantPacket : public Pakiet {
@@ -71,12 +86,18 @@ class ResponseCheckRestaurantPacket : public Pakiet {
     ResponseCheckRestaurantPacket();
     int globalLastRestaurantId;
      int globalRestaurantSize;
+
+     std::vector<std::string> stringi();
+     std::vector<int> inty() ;
 };
 
 class GetRestaurantPacket : public Pakiet {
     public:
     GetRestaurantPacket();
     int toUpdateRestaurantId;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class ResponseGetRestaurantPacket : public Pakiet {
@@ -86,6 +107,9 @@ class ResponseGetRestaurantPacket : public Pakiet {
     std::string restaurantName;
     std::string restaurantAdress;
     std::string restaurantType;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class GetCommentsPacket : public Pakiet {
@@ -94,6 +118,9 @@ class GetCommentsPacket : public Pakiet {
     int restaurantId;
     int commentId;
     std::string addedDate;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class ResponseGetCommentsPacket : public Pakiet {
@@ -102,6 +129,9 @@ class ResponseGetCommentsPacket : public Pakiet {
     std::string userLogin;
     std::string text;
     std::string date;
+
+    std::vector<std::string> stringi();
+   std::vector<int> inty() ;
 };
 
 class AddCommentPacket : public Pakiet {
@@ -111,12 +141,18 @@ class AddCommentPacket : public Pakiet {
     int restaurantId;
     std::string date;
     std::string text;
+
+    std::vector<std::string> stringi();
+   std::vector<int> inty() ;
 };
 
 class ResponseAddCommentPacket : public Pakiet {
     public:
     ResponseAddCommentPacket();
     int commentId;
+
+   std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class AddRestaurantPacket : public Pakiet {
@@ -125,36 +161,55 @@ class AddRestaurantPacket : public Pakiet {
     std::string restaurantName;
     std::string restaurantAdress;
     std::string restaurantType;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class ResponseAddRestaurantPacket : public Pakiet {
     public:
     ResponseAddRestaurantPacket();
     int restaurantId;
+
+
+    std::vector<std::string> stringi();
+   std::vector<int> inty() ;
 };
 
 class DeleteCommentPacket : public Pakiet {
     public:
     DeleteCommentPacket();
     int commentId;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class ResponseDeleteCommentPacket : public Pakiet {
     public:
     ResponseDeleteCommentPacket();
     bool ifDeleted;
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 class SendNextPacket : public Pakiet{
 public:
     SendNextPacket();
+
+    std::vector<std::string> stringi();
+   std::vector<int> inty() ;
 };
 
 class EndOfDataPacket : public Pakiet{
 
 public :
     EndOfDataPacket();
+
+    std::vector<std::string> stringi();
+    std::vector<int> inty() ;
 };
 
 
-#endif // PAKIET_H
+

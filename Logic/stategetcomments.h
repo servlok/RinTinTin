@@ -1,15 +1,15 @@
 #ifndef STATEGETCOMMENTS_H
 #define STATEGETCOMMENTS_H
-#include "pakiet.h"
+#include "../Deserialization/pakiet.h"
 #include <vector>
 class StateGetComments
 {
     std::vector<ResponseGetCommentsPacket> baza;
 public:
     StateGetComments();
-    ResponseGetCommentsPacket StateGetComments::rotate();
-    void StateGetComments::start(std::vector<ResponseGetCommentsPacket> baza);
-    bool StateGetComments::ifRotate();
+    ResponseGetCommentsPacket rotate();
+    void start(std::vector<ResponseGetCommentsPacket> baza);
+    bool ifRotate();
 };
 
 #endif // STATEGETCOMMENTS_H

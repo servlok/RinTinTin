@@ -7,11 +7,11 @@
 ProtocolParser::ProtocolParser(TcpSocket *sock)
 {
     this->tcpsocket = sock;
-//    deserialization = new Deserializacja();
+    deserialization = new Deserializacja(this);
 }
 
 ProtocolParser::~ProtocolParser() {
-//    delete deserialization;
+    delete deserialization;
 }
 
 int ProtocolParser::parseIn(std::string data) {
@@ -26,15 +26,12 @@ int ProtocolParser::parseIn(std::string data) {
     }
 
     Pakiet packet;
-    ResponseAddUserPacket packet2;
     std::cout<<"Idik otrzymanego pakietu "<<packetType<<"\n";
     try {
         switch(packetType) {
         case ADD_USER :
             packet = this->parseUserPacket(index,data);
             std::cout<<"Otrzymano pakiet ADD_USER\n";
-            packet2.userId = 20;
-            this->parseOut(packet2);
             break;
         case CHECK_RESTAURANT :
             packet = this->parseCheckRestaurantPacket(index,data);
@@ -76,7 +73,7 @@ int ProtocolParser::parseIn(std::string data) {
         return -1;
     }
 
-//    deserialization->start(packet);
+    deserialization->start(&packet);
 
     return 0;
 
@@ -252,45 +249,6 @@ SendNextPacket ProtocolParser::parseSendNextPacket() {
 
 //////////////////////////////////////////////////////////////////Out///////////////////////////////////////////////////
 
-int ProtocolParser::parseOut(Pakiet packet) {
-    std::string toSend;
-    switch((PacketType)packet.id) {
-        case RESPONSE_ADD_USER:
-            toSend = this->parsePacketOut(static_cast<ResponseAddUserPacket&>(packet));
-            std::cout<<"Wysylam pakiet RESPONSE_ADD_USER"<<std::endl;
-            break;
-        case RESPONSE_RESTAURANT:
-            toSend = this->parsePacketOut(static_cast<ResponseCheckRestaurantPacket&>(packet));
-            break;
-        case RESPONSE_GET_RESTAURANT :
-            toSend = this->parsePacketOut(static_cast<ResponseGetRestaurantPacket&>(packet));
-            break;
-        case RESPONSE_GET_COMMENTS :
-            toSend = this->parsePacketOut(static_cast<ResponseGetCommentsPacket&>(packet));
-            break;
-        case RESPONSE_ADD_COMMENT :
-            toSend = this->parsePacketOut(static_cast<ResponseAddCommentPacket&>(packet));
-            break;
-        case RESPONSE_ADD_RESTAURANT :
-            toSend = this->parsePacketOut(static_cast<ResponseAddRestaurantPacket&>(packet));
-            break;
-        case RESPONSE_DELETE_COMMENT :
-            toSend = this->parsePacketOut(static_cast<ResponseDeleteCommentPacket&>(packet));
-            break;
-        case END_OF_DATA :
-            toSend = this->parsePacketEndOfData();
-            break;
-        default :
-            std::cout<<"Obecnie wyslanie pakietu jest nie obslugiwane\n";
-            break;
-    }
-
-    tcpsocket->sendPackage(toSend);
-
-    return 0;
-
-}
-
 std::string intToStr(int n)
 {
      std::string tmp, ret;
@@ -308,7 +266,7 @@ std::string intToStr(int n)
      return ret;
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
     std::string response,temp;
     temp += "13";
     temp += '\n';
@@ -321,10 +279,10 @@ std::string ProtocolParser::parsePacketOut(ResponseAddCommentPacket packet) {
     response += temp;
     //this->encryption(response);
 
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
     std::string response,temp;
     temp += "15";
     temp += '\n';
@@ -332,14 +290,15 @@ std::string ProtocolParser::parsePacketOut(ResponseAddRestaurantPacket packet) {
     temp += intToStr(packet.restaurantId);
     temp += '\n';
 
-    response += temp.size();
+    response += intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     std::string response,temp;
     temp += "3";
     temp += '\n';
@@ -352,10 +311,11 @@ std::string ProtocolParser::parsePacketOut(ResponseAddUserPacket packet) {
     response += temp;
     //this->encryption(response);
     std::cout<<"UserId: "<<packet.userId<<" Pakiet do wyslania1 "<<response;
-    return response;
+
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet) {
     std::string response,temp;
     temp += "5";
     temp += '\n';
@@ -363,15 +323,16 @@ std::string ProtocolParser::parsePacketOut(ResponseCheckRestaurantPacket packet)
     temp += intToStr(packet.globalLastRestaurantId);
     temp += '\n';
 
-    response+=temp.size();
+    response+= intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
     std::string response,temp;
+
     temp += "11";
     temp += '\n';
 
@@ -384,14 +345,14 @@ std::string ProtocolParser::parsePacketOut(ResponseGetCommentsPacket packet) {
     temp += packet.date;
     temp += '\n';
 
-    response+=temp.size();
+    response+= intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
     std::string response,temp;
     temp += "7";
     temp += '\n';
@@ -414,10 +375,10 @@ std::string ProtocolParser::parsePacketOut(ResponseGetRestaurantPacket packet) {
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(PingPacket packet) {
+void ProtocolParser::parsePacketOut(PingPacket packet) {
     std::string response,temp;
     temp += "0";
     temp += '\n';
@@ -425,28 +386,28 @@ std::string ProtocolParser::parsePacketOut(PingPacket packet) {
     temp += intToStr(packet.userId);
     temp += '\n';
 
-    response+=temp.size();
+    response+= intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketOut(ResponseDeleteCommentPacket packet) {
+void ProtocolParser::parsePacketOut(ResponseDeleteCommentPacket packet) {
     std::string response,temp;
     temp += "8";
     temp += '\n';
     (packet.ifDeleted == true ? temp += "1" : temp +="0" );
     temp += '\n';
 
-    response+=temp.size();
+    response+= intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePacketEndOfData() {
+void ProtocolParser::parsePacketEndOfData() {
     std::string response,temp;
     temp +="9";
     temp += '\n';
@@ -454,19 +415,19 @@ std::string ProtocolParser::parsePacketEndOfData() {
     temp += '\n';
 
     std::cout<<"Wyslano END_OF_DATA";
-    response+=temp.size();
+    response+= intToStr(temp.size());
     response += '\n';
     response += temp;
     //this->encryption(response);
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
-std::string ProtocolParser::parsePingPacket() {
+void ProtocolParser::parsePingPacket() {
     std::string response,temp;
     temp += "1";
     temp += '\n';
 
-    return response;
+    tcpsocket->sendPackage(response);
 }
 
 void ProtocolParser::deencryption(char* data) {
